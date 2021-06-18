@@ -14,12 +14,13 @@ function getIDnum (): number {
 
 function getSensorsString () {
 	let idstr = getIDencoded()
+    let tim = input.runningTime()/100 - timeDelta
     let temp = input.temperature()-3.5
     let pitch = input.rotation(Rotation.Pitch)
     let roll = input.rotation(Rotation.Roll)
     let comp = input.compassHeading()
     let light = input.lightLevel()
-    return idstr+";"+temp.toString()+";"+pitch.toString()+";"+
+    return idstr+";"+tim.toString()+";"+temp.toString()+";"+pitch.toString()+";"+
             roll.toString()+";"+light.toString()+";"+comp.toString()+"\n\r"
 }
 
@@ -35,6 +36,15 @@ radio.onReceivedValue(function (name: string, value: number) {
     }
     else if (name === "WAKE") {
         radio.sendValue("STATION", getIDnum())
+    }
+    else if (name === "DATA") {
+        let reply=""
+        switch (value) {
+            case 0:     // send all sensor data
+                reply = getSensorsString()
+                break;
+        }
+        radio.sendString(reply)
     }
 
 })
