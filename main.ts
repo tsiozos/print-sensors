@@ -20,8 +20,9 @@ function getSensorsString () {
     let roll = input.rotation(Rotation.Roll)
     let comp = input.compassHeading()
     let light = input.lightLevel()
+    let mag = input.magneticForce(Dimension.Strength)
     return idstr+";"+tim.toString()+";"+temp.toString()+";"+pitch.toString()+";"+
-            roll.toString()+";"+light.toString()+";"+comp.toString()+"\n\r"
+            roll.toString()+";"+light.toString()+";"+comp.toString()+";"+mag.toString()+"\n\r"
 }
 
 function sendWithRSSI(data: string) {
