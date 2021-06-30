@@ -24,6 +24,14 @@ function getSensorsString () {
             roll.toString()+";"+light.toString()+";"+comp.toString()+"\n\r"
 }
 
+function sendWithRSSI(data: string) {
+    let tries = triesFromRSSI(getRSSI(), 0.95, 5)
+        for (let i=0; i < tries; i++) {
+            radio.sendString(data)
+            basic.pause(randint(50,60))
+        }
+}
+
 radio.setGroup(1)
 radio.setTransmitPower(7)
 basic.showString("" + (getIDencoded()))
@@ -45,7 +53,7 @@ radio.onReceivedValue(function (name: string, value: number) {
                 reply = getSensorsString()
                 break;
         }
-        radio.sendString(reply)
+        sendWithRSSI(reply)
     }
 
 })
