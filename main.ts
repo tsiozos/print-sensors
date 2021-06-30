@@ -58,3 +58,28 @@ basic.forever(function () {
         serial.writeString(sens[i]+"\n\r")
     basic.pause(2000)
 })
+
+
+function getRSSI() {
+    return radio.receivedPacket(RadioPacketProperty.SignalStrength)
+}
+
+function triesN(y: number, p: number) {
+    return Math.ceil(Math.log(1-y)/Math.log(p))
+}
+
+function lossP(y: number, n: number){
+    return Math.pow((1-y),1/n)
+}
+
+function triesFromRSSI(rssi: number, y: number, maxtries: number){
+    let rssi2: number = rssi + 100
+    let p: number = Math.min(1,5936.2673*rssi2**(-3.7231)) // this function may return a p > 1
+    // so we limit it to 1
+    let t: number = 0
+    if (p==1)
+        t = maxtries
+    else
+        t = Math.max(1,triesN(y,p))  //if tries fall below 1, at least 1 try
+    return t
+}
