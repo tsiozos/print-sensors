@@ -32,10 +32,11 @@ radio.onReceivedValue(function (name: string, value: number) {
     if (name === "SYNC") {
         // the network time is nettime = input.runningTime()/100 - timeDelta
         timeDelta = input.runningTime()/100 - value
-        radio.sendValue("SYNCACK",0)
+        radio.sendValue("SYNCACK",getIDnum()) //ACK with station ID
     }
     else if (name === "WAKE") {
         radio.sendValue("STATION", getIDnum())
+        
     }
     else if (name === "DATA") {
         let reply=""
